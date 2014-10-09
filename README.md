@@ -5,21 +5,28 @@ Sample from distributions in javascript. Currently supported:
 - Discrete
 - Multinomial
 
-Syntax: 
-
 ```
 var bern = new Bernoulli(.5);
-// draw a sample
 bern.draw();
-// draw 10 samples into an array
 bern.sample(10); // Get an array of 10 samples. 
 ```
-
+```
+var binom = new Binomial(10, 0.5);
+binom.draw();
+binom.sample(10);
+```
 ```
 var probabilities = [.1, .2, .3, .05, .15];
 var disc = new Discrete(probabilities);
 disc.draw(); 
 disc.sample(10); 
+```
+```
+// The probabilities will be normalized for you. 
+var probs = [1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+var mult = new Multinomial(probs, 5);
+mult.draw();
+mult.sample(10);
 ```
 
 
