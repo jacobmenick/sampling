@@ -7,14 +7,20 @@ Sample from distributions in javascript. Currently supported:
 
 Syntax: 
 
+```
 var bern = new Bernoulli(.5);
-bern.draw(); // Take one sample. 
+// draw a sample
+bern.draw();
+// draw 10 samples into an array
 bern.sample(10); // Get an array of 10 samples. 
+```
 
-var disc = new Discrete([.1, .2, .3, .05, .15]); // the array is an array of probabilities of each index. 
-
-disc.draw(); // sample from the discrete interval [0,4] with the probabilities given above.
-disc.sample(10); // draw 10 such samples in an array. 
+```
+var probabilities = [.1, .2, .3, .05, .15];
+var disc = new Discrete(probabilities);
+disc.draw(); 
+disc.sample(10); 
+```
 
 
 
