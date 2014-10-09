@@ -1,4 +1,4 @@
-Sample from distributions in javascript. Currently supported: 
+Sample from distributions in javascript (on the client side). Currently supported: 
 
 - Bernoulli
 - Binomial
