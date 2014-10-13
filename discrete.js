@@ -29,6 +29,40 @@ function fillZeroes(size) {
     return out;
 }
 
+function fillArrayWith(size, thing) {
+		var out = [];
+		while (size > 0) {
+				out.push(thing);
+				size--;
+		}
+		return out;
+}
+
+// Sampling from arrays. 
+
+Array.prototype.sample = function(howMany, replace) {
+		if (!replace) var replace=1;
+		if (!howMany) var howMany=1;
+		if (replace == 0 & howMany > this.length) {
+				throw "can't sample more elements than the array contains without replacement!";
+		}
+		if (replace==1) {
+				var disc = new Discrete(fillArrayWith(this.length, 1));
+				var out = this[disc.draw()];
+		} else {
+				var copy = this.slice(0);
+				var out = [];
+				while (howMany > 0) {
+						var disc = new Discrete(fillArrayWith(copy.length), 1);
+						var index = disc.draw();
+						out.push(this[index]);
+						this.splice(index, 1);
+						howMany--;
+				}
+				return out;
+		}
+}
+
 // Distribution OOP. 
 
 function Bernoulli(p) {
