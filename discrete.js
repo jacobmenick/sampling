@@ -43,7 +43,7 @@ function fillArrayWith(size, thing) {
 Array.prototype.sample = function(howMany, replace) {
 		if (!replace) var replace=1;
 		if (!howMany) var howMany=1;
-		if (replace == 0 & howMany > this.length) {
+		if (replace != 1 & howMany > this.length) {
 				throw "can't sample more elements than the array contains without replacement!";
 		}
 		var out = [];
@@ -57,10 +57,11 @@ Array.prototype.sample = function(howMany, replace) {
 		} else {
 				var copy = this.slice(0);
 				while (counter < howMany) {
-						var disc = new Discrete(fillArrayWith(copy.length), 1);
+						var disc = new Discrete(fillArrayWith(copy.length, 1));
 						var index = disc.draw();
-						out.push(this[index]);
-						this.splice(index, 1);
+						out.push(copy[index]);
+						copy.splice(index, 1);
+						console.log("array: "+copy);
 						counter++;
 				}
 		}
