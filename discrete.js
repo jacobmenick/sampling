@@ -97,7 +97,7 @@ function Multinomial(probs, n) {
 		this.k = this.probs.length;
 		this.disc = new Discrete(this.probs);
 		this.draw = function() {
-				var out = fillZeroes(this.n);
+				var out = fillZeroes(this.k);
 				for (var i = 0; i < this.n; i++) {
 						var index = this.disc.draw();
 						out[index] += 1;
