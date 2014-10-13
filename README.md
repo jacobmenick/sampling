@@ -31,7 +31,6 @@ mult.sample(10);
 ```
 var array = ["big", "dawg", "in", "hurr"];
 array.sample(3,"no"); // Sample 3 elements without replacement. 
-// Any non-null value that's not 1 or true will do for indicating no replacement. 
 ```
 
 
