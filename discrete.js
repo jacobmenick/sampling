@@ -46,21 +46,25 @@ Array.prototype.sample = function(howMany, replace) {
 		if (replace == 0 & howMany > this.length) {
 				throw "can't sample more elements than the array contains without replacement!";
 		}
+		var out = [];
+		var counter = 0;
 		if (replace==1) {
-				var disc = new Discrete(fillArrayWith(this.length, 1));
-				var out = this[disc.draw()];
+				while (counter < howMany) {
+						var disc = new Discrete(fillArrayWith(this.length, 1));
+						out.push(this[disc.draw()]);
+						counter++;
+				}
 		} else {
 				var copy = this.slice(0);
-				var out = [];
-				while (howMany > 0) {
+				while (counter < howMany) {
 						var disc = new Discrete(fillArrayWith(copy.length), 1);
 						var index = disc.draw();
 						out.push(this[index]);
 						this.splice(index, 1);
-						howMany--;
+						counter++;
 				}
-				return out;
 		}
+		return out;
 }
 
 // Distribution OOP. 
