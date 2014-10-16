@@ -30,7 +30,7 @@ disc.sample(10);
 ```javascript
 // The probabilities will be normalized for you. 
 var probs = [1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-var mult = SJS.Multinomial(probs, 5);
+var mult = SJS.Multinomial(5, probs);
 mult.draw();
 mult.sample(10);
 ```
