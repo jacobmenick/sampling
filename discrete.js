@@ -1,8 +1,6 @@
 // discrete.js
 // Sample from discrete distributions.
 
-// Distribution OOP. 
-// * Uses IIFE pattern
 var Sampling = SJS = (function(){
 
 	// Utility functions
@@ -120,6 +118,7 @@ var Sampling = SJS = (function(){
 })();
 
 //*** Sampling from arrays ***//
+// Eventually merge into SJS ???
 function sample_from_array(array, numSamples, withReplacement) {
 	var n = numSamples || 1,
 		result = [],
@@ -149,42 +148,3 @@ function sample_from_array(array, numSamples, withReplacement) {
 		}
 		return result;
 }
-// throw an error if sample is already defined on the array prototype
-// if (Array.prototype.hasOwnProperty("sample")) { 
-// 	throw new Error("Array prototype already has 'sample' property.");
-// }
-// Array.prototype.sample = function(howMany, replace) {
-// 	var result = [],
-// 		counter = 0,
-// 		copy,
-// 		disc,
-// 		index;
-
-// 	// input validation
-// 	howMany = howMany || 1;
-// 	if (replace === undefined || replace === null) {
-// 		replace = 1; // default to sampling with replacement?
-// 	}
-// 	if (replace !== 1 && howMany > this.length) {
-// 		throw "can't sample more elements than the array contains without replacement!";
-// 	}
-
-// 	if (replace === 1) {
-// 		while (counter < howMany) {
-// 			disc = SJS.Discrete(SJS._fillArrayWithNumber(this.length, 1));
-// 			result.push(this[disc.draw()]);
-// 			counter++;
-// 		}
-// 	} else {
-// 		copy = this.slice(0);
-// 		while (counter < howMany) {
-// 			disc = SJS.Discrete(SJS._fillArrayWithNumber(copy.length, 1));
-// 			index = disc.draw();
-// 			result.push(copy[index]);
-// 			copy.splice(index, 1);
-// 			console.log("array: "+copy);
-// 			counter++;
-// 		}
-// 	}
-// 	return result;
-// }
