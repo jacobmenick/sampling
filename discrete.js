@@ -1,154 +1,162 @@
 // discrete.js
 // Sample from discrete distributions.
 
-// UTILITIES
-
-function sumVec(xs) {
-    return xs.reduce(function(a, b) {return a+b;});
-}
-
-function normalize(vector) {
-    var sum = sumVec(vector);
-    return vector.map(function(x) {return x/sum;});
-}
-
-function rangeFunc(upper) {
-    var out = [];
-    for (var i = 0; i < upper; i++) {
-				out.push(i);
-    }
-    return out;
-}
-
-function fillZeroes(size) {
-    var out = [];
-    while (size > 0) {
-				out.push(0);
-				size--;
-    }
-    return out;
-}
-
-function fillArrayWith(size, thing) {
-		var out = [];
-		while (size > 0) {
-				out.push(thing);
-				size--;
-		}
-		return out;
-}
-
-// Sampling from arrays. 
-
-Array.prototype.sample = function(howMany, replace) {
-		if (!replace) var replace=1;
-		if (!howMany) var howMany=1;
-		if (replace != 1 & howMany > this.length) {
-				throw "can't sample more elements than the array contains without replacement!";
-		}
-		var out = [];
-		var counter = 0;
-		if (replace==1) {
-				while (counter < howMany) {
-						var disc = new Discrete(fillArrayWith(this.length, 1));
-						out.push(this[disc.draw()]);
-						counter++;
-				}
-		} else {
-				var copy = this.slice(0);
-				while (counter < howMany) {
-						var disc = new Discrete(fillArrayWith(copy.length, 1));
-						var index = disc.draw();
-						out.push(copy[index]);
-						copy.splice(index, 1);
-						console.log("array: "+copy);
-						counter++;
-				}
-		}
-		return out;
-}
-
 // Distribution OOP. 
+// * Uses IIFE pattern
+var Sampling = SJS = (function(){
 
-function Bernoulli(p) {
-		this.p = p
-		this.draw = function() {
-				if (Math.random() < this.p) return 1;
-				return 0;
+	// Utility functions
+	function _sum(a, b) {
+		return a + b;
+	};
+	function _fillArrayWithNumber(size, num) {
+		// thanks be to stackOverflow... this is a beautiful one-liner
+		return Array.apply(null, Array(size)).map(Number.prototype.valueOf, num);
+	};
+	// Prototype function
+	function _samplerFunction(size) {
+		if (!this.draw) { 
+			throw new Error ("Distribution must specify a draw function.");
 		}
-		this.sample = function(n) {
-				var out = [];
-				while (n > 0) {
-						out.push(this.draw());
-						n--;
-				}
-				return out;
+		var result = [];
+		while (size--) { 
+			result.push(this.draw()); 
 		}
-}
+		return result;
+	};
+	// Prototype for discrete distributions
+	var _samplerPrototype = {
+		sample: _samplerFunction
+	};
 
-function Binomial(n, p) {
-		this.n = n;
-		this.p = p;
-		this.bern = new Bernoulli(p);
-		this.draw = function() {
-				var total = 0;
-				for (var i = 0; i < this.n; i++) {
-						total += this.bern.draw();
-				}
-				return total;
-		}
-		this.sample = function(N) {
-				var out = [];
-				while (N > 0) {
-						out.push(this.draw());
-						N--;
-				}
-				return out;
-		}
-}
+	function Bernoulli(p) {
 
-function Discrete(probs) {
-		this.probs = probs;
-		this.draw = function() {
-				if (sumVec(this.probs) != 1) this.probs = normalize(this.probs);
-				var k = this.probs.length;
-				for (var i = 0; i < k; i++) {
-						var newProbs = normalize(this.probs.slice(i));
-						var bern = new Bernoulli(newProbs[0]);
-						var choice = bern.draw();
-						if (choice == 1) return i;
-				}
-				return k-1;
-		}
-		this.sample = function(N) {
-				var out = [];
-				while (N > 0) {
-						out.push(this.draw());
-						N--;
-				}
-				return out;
-		}
-}
+		var result = Object.create(_samplerPrototype);
 
-function Multinomial(probs, n) {
-		this.probs = probs;
-		this.n = n;
-		this.k = this.probs.length;
-		this.disc = new Discrete(this.probs);
-		this.draw = function() {
-				var out = fillZeroes(this.k);
-				for (var i = 0; i < this.n; i++) {
-						var index = this.disc.draw();
-						out[index] += 1;
-				}
-				return out;
+		result.draw = function() {
+			return (Math.random() < p) ? 1 : 0;
+		};
+
+		result.toString = function() {
+			return "Bernoulli( " + p + " )";
+		};
+
+		return result;
+	}
+
+	function Binomial(n, p) {
+
+		var result = Object.create(_samplerPrototype),
+			bern = Sampling.Bernoulli(p);
+
+		result.draw = function() {
+			return bern.sample(n).reduce(_sum, 0); // less space efficient than adding a bunch of draws, but cleaner :)
 		}
-		this.sample = function(N) {
-				var out = [];
-				while (N > 0) {
-						out.push(this.draw());
-						N--;
-				}
-				return out;
+
+		result.toString = function() { 
+			return "Binom( " + 
+					[n, p].join(", ") + 
+					" )"; 
 		}
-}
+
+		return result;
+	}
+
+	function Discrete(probs) { // probs should be an array of probabilities. (they get normalized automagically) //
+		
+		var result = Object.create(_samplerPrototype),
+			k = probs.length;
+
+		result.draw = function() {
+			var i, p;
+			for (i = 0; i < k; i++) {
+				p = probs[i] / probs.slice(i).reduce(_sum, 0); // this is the (normalized) head of a slice of probs
+				if (Bernoulli(p).draw()) return i;             // using the truthiness of a Bernoulli draw
+			}
+			return k - 1;
+		};
+
+		result.toString = function() {
+			return "Dicrete( [" + 
+					probs.join(", ") + 
+					"] )";
+		};
+
+		return result;
+	}
+
+	function Multinomial(n, probs) {
+
+		var result = Object.create(_samplerPrototype),
+			k = probs.length,
+			disc = Discrete(probs);
+
+		result.draw = function() {
+			var draw_result = _fillArrayWithNumber(k, 0),
+				i = n;
+			while (i--) {
+				draw_result[disc.draw()] += 1;
+			}
+			return draw_result;
+		};
+
+		result.toString = function() {
+			return "Multinom( " + 
+					n + 
+					", [" + probs.join(", ") + 
+					"] )";
+		};
+
+		return result;
+	}
+
+	return {
+		_fillArrayWithNumber: _fillArrayWithNumber, // REMOVE EVENTUALLY - this is just so the Array.prototype mod can work
+		Bernoulli: Bernoulli,
+		Binomial: Binomial,
+		Discrete: Discrete,
+		Multinomial: Multinomial
+	};
+})();
+
+//*** Sampling from arrays ***//
+// throw an error if sample is already defined on the array prototype
+// if (Array.prototype.hasOwnProperty("sample")) { 
+// 	throw new Error("Array prototype already has 'sample' property.");
+// }
+// NB: in lieu of altering the protoype, try making a new prototype
+// Array.prototype.sample = function(howMany, replace) {
+// 	var result = [],
+// 		counter = 0,
+// 		copy,
+// 		disc,
+// 		index;
+
+// 	// input validation
+// 	howMany = howMany || 1;
+// 	if (replace === undefined || replace === null) {
+// 		replace = 1; // default to sampling with replacement?
+// 	}
+// 	if (replace !== 1 && howMany > this.length) {
+// 		throw "can't sample more elements than the array contains without replacement!";
+// 	}
+
+// 	if (replace === 1) {
+// 		while (counter < howMany) {
+// 			disc = SJS.Discrete(SJS._fillArrayWithNumber(this.length, 1));
+// 			result.push(this[disc.draw()]);
+// 			counter++;
+// 		}
+// 	} else {
+// 		copy = this.slice(0);
+// 		while (counter < howMany) {
+// 			disc = SJS.Discrete(SJS._fillArrayWithNumber(copy.length, 1));
+// 			index = disc.draw();
+// 			result.push(copy[index]);
+// 			copy.splice(index, 1);
+// 			console.log("array: "+copy);
+// 			counter++;
+// 		}
+// 	}
+// 	return result;
+// }
