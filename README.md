@@ -1,9 +1,14 @@
-Sample from distributions in javascript (on the client side). Currently supported: 
+# samplings
+*JavaScript for sampling from a handful of discrete distributions*
+
+## Currently Supported
 
 - Bernoulli
 - Binomial
 - Discrete
 - Multinomial
+
+## Examples
 
 ```javascript
 var bern = Sampling.Bernoulli(.5);
