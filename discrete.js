@@ -120,11 +120,39 @@ var Sampling = SJS = (function(){
 })();
 
 //*** Sampling from arrays ***//
+function sample_from_array(array, numSamples, withReplacement) {
+	var n = numSamples || 1,
+		result = [],
+		copy,
+		disc,
+		index;
+
+		if (!withReplacement && numSamples > array.length) {
+			throw new Error("Sampling without replacement, and the sample size exceeds vector size.")
+		}
+
+		if (withReplacement) {
+			while(numSamples--) {
+				disc = SJS.Discrete(SJS._fillArrayWithNumber(array.length, 1));
+				result.push(array[disc.draw()]);
+			}
+		} else {
+			// instead of splicing, consider sampling from an array of possible indices? meh?
+			copy = array.slice(0);
+			while (numSamples--) {
+				disc = SJS.Discrete(SJS._fillArrayWithNumber(copy.length, 1));
+				index = disc.draw();
+				result.push(copy[index]);
+				copy.splice(index, 1);
+				console.log("array: "+copy);
+			}	
+		}
+		return result;
+}
 // throw an error if sample is already defined on the array prototype
 // if (Array.prototype.hasOwnProperty("sample")) { 
 // 	throw new Error("Array prototype already has 'sample' property.");
 // }
-// NB: in lieu of altering the protoype, try making a new prototype
 // Array.prototype.sample = function(howMany, replace) {
 // 	var result = [],
 // 		counter = 0,

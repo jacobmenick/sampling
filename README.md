@@ -34,6 +34,12 @@ var mult = SJS.Multinomial(5, probs);
 mult.draw();
 mult.sample(10);
 ```
-
+```javascript
+var myArray = [0,1,2,3,4,5]
+// sample five elements with replacement
+sample_from_array(myArray, 5, true)
+// sample five elements without replacement
+sample_from_array(myArray, 5)
+```
 
 
