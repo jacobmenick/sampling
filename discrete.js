@@ -11,6 +11,11 @@ var Sampling = SJS = (function(){
 		// thanks be to stackOverflow... this is a beautiful one-liner
 		return Array.apply(null, Array(size)).map(Number.prototype.valueOf, num);
 	};
+	function _rangeFunc(upper) {
+	    var i = 0, out = [];
+	    while (i < upper) out.push(i++);
+	    return out;
+	};
 	// Prototype function
 	function _samplerFunction(size) {
 		if (!this.draw) { 
@@ -74,6 +79,29 @@ var Sampling = SJS = (function(){
 			return k - 1;
 		};
 
+		result.sampleNoReplace = function(size) {
+		    if (size>probs.length) {
+			throw new Error("Sampling without replacement, and the sample size exceeds vector size.")
+		    }
+		    var disc, index, sum, samp = [];
+		    var currentProbs = probs;
+		    var live = _rangeFunc(probs.length);
+		    while (size--) {
+			sum = currentProbs.reduce(_sum, 0);
+			currentProbs = currentProbs.map(function(x) {return x/sum; });
+			disc = SJS.Discrete(currentProbs);
+			index = disc.draw();
+			samp.push(live[index]);
+			live.splice(index, 1);
+			currentProbs.splice(index, 1);
+			sum = currentProbs.reduce(_sum, 0);
+			currentProbs = currentProbs.map(function(x) {return x/sum; });
+		    }
+		    currentProbs = probs;
+		    live = _rangeFunc(probs.length);
+		    return samp;
+		}
+
 		result.toString = function() {
 			return "Dicrete( [" + 
 					probs.join(", ") + 
@@ -110,6 +138,7 @@ var Sampling = SJS = (function(){
 
 	return {
 		_fillArrayWithNumber: _fillArrayWithNumber, // REMOVE EVENTUALLY - this is just so the Array.prototype mod can work
+		_rangeFunc: _rangeFunc,
 		Bernoulli: Bernoulli,
 		Binomial: Binomial,
 		Discrete: Discrete,
