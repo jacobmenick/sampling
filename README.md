@@ -1,4 +1,5 @@
-# samplings
+# sampling
+
 *JavaScript for sampling from a handful of discrete distributions*
 
 ## Currently Supported
