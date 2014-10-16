@@ -1,0 +1,17 @@
+<script src="./discrete.js"></script>
+<script>
+//simple tests
+	var bern = SJS.Bernoulli(.1);
+	var binom = SJS.Binomial(20,.1);
+	var disc = SJS.Discrete([.1,.9]);
+	var multinom = SJS.Multinomial(20, [.1, .6, .3]);
+
+	[bern, binom, disc, multinom].forEach(function(d) {
+		try {
+			console.log(d.toString());
+			console.log(d.sample(10));
+		} catch (e) {
+			console.log("NO SMILES!\n", e.message);
+		}
+	})
+</script>
