@@ -123,7 +123,6 @@ var Sampling = SJS = (function(){
 function sample_from_array(array, numSamples, withReplacement) {
 	var n = numSamples || 1,
 		result = [],
-		counter = 0,
 		copy,
 		disc,
 		index;
@@ -133,13 +132,14 @@ function sample_from_array(array, numSamples, withReplacement) {
 		}
 
 		if (withReplacement) {
-			while(howMany--) {
-				disc = SJS.Discrete(SJS._fillArrayWithNumber(this.length, 1));
-				result.push(this[disc.draw()]);
+			while(numSamples--) {
+				disc = SJS.Discrete(SJS._fillArrayWithNumber(array.length, 1));
+				result.push(array[disc.draw()]);
 			}
 		} else {
-			copy = this.slice(0);
-			while (howMany--) {
+			// instead of splicing, consider sampling from an array of possible indices? meh?
+			copy = array.slice(0);
+			while (numSamples--) {
 				disc = SJS.Discrete(SJS._fillArrayWithNumber(copy.length, 1));
 				index = disc.draw();
 				result.push(copy[index]);
