@@ -1,6 +1,6 @@
 # sampling
 
-*JavaScript for sampling from a handful of discrete distributions*
+_JavaScript for sampling from a handful of discrete probability distributions_
 
 ## Currently Supported
 
@@ -17,7 +17,7 @@ bern.draw();     // One random draw
 bern.sample(10); // Get an array of 10 samples. 
 ```
 ```javascript
-var binom = SJS.Binomial(10, 0.5);
+var binom = SJS.Binomial(10, 0.5);  // alternate syntax (Sampling === SJS)
 binom.draw();
 binom.sample(10);
 ```
