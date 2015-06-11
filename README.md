@@ -8,6 +8,8 @@ _JavaScript for sampling from a handful of discrete probability distributions_
 - Binomial
 - Discrete
 - Multinomial
+- Poisson
+- Negative Binomial
 
 ## Examples
 
