@@ -1,0 +1,28 @@
+{
+  "name": "discrete-sampling",
+  "version": "1.0.0",
+  "description": "JavaScript for sampling from a handful of discrete probability distributions",
+  "main": "discrete.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacobmenick/sampling.git"
+  },
+  "keywords": [
+    "probability",
+    "sampling",
+    "discrete",
+    "distributions"
+  ],
+  "author": "Jacob Menick",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jacobmenick/sampling/issues"
+  },
+  "homepage": "https://github.com/jacobmenick/sampling#readme",
+  "dependencies": {
+    "chai": "^3.0.0"
+  }
+}
