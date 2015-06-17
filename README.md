@@ -2,6 +2,20 @@
 
 _JavaScript for sampling from a handful of discrete probability distributions_
 
+## Setup
+This is now a node module on npm. To install, go to your project's directory in
+a terminal and enter
+```npm install discrete-sampling```
+To load the library in your own node module, use
+```javascript
+var SJS = Sampling = require('discrete-sampling');
+```
+To load the module in the browser, you can load the script with
+```html
+<script src="node_modules/discrete-sampling/dist/discrete.js"></script>
+```
+and then use the require statement.
+
 ## Currently Supported
 
 - Bernoulli
