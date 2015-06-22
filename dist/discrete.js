@@ -225,4 +225,7 @@ exports.sample_from_array = function(array, numSamples, withReplacement) {
     return result;
 }
 
+// Give a global variable for this library
+window.SJS = window.Sampling = exports;
+
 },{}]},{},[1]);

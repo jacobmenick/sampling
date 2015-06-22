@@ -14,7 +14,8 @@ To load the module in the browser, you can load the script with
 ```html
 <script src="node_modules/discrete-sampling/dist/discrete.js"></script>
 ```
-and then use the require statement.
+and then the library will be accessible through the global variables `SJS` and
+`Sampling`.
 
 ## Currently Supported
 
