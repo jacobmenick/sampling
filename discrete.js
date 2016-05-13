@@ -19,7 +19,7 @@ var Sampling = SJS = (function(){
     // Prototype function
     function _samplerFunction(size) {
 	if (!Number.isInteger(size) || size < 0) {
-	  throw new Error ("size must be a non-negative integer.");
+	  throw new Error ("Number of samples must be a non-negative integer.");
 	}
 	if (!this.draw) {
 	    throw new Error ("Distribution must specify a draw function.");
