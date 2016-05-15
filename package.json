@@ -1,6 +1,6 @@
 {
   "name": "discrete-sampling",
-  "version": "1.0.3",
+  "version": "1.0.2",
   "description": "JavaScript for sampling from a handful of discrete probability distributions",
   "main": "discrete.js",
   "scripts": {
