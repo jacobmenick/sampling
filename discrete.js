@@ -1,7 +1,6 @@
 // discrete.js
 // Sample from discrete distributions.
 
-
 // Utility functions
 function _sum(a, b) {
   return a + b;
@@ -17,14 +16,17 @@ function _rangeFunc(upper) {
 };
 // Prototype function
 function _samplerFunction(size) {
-  if (!this.draw) {
-    throw new Error ("Distribution must specify a draw function.");
-  }
-  var result = [];
-  while (size--) {
-    result.push(this.draw());
-  }
-  return result;
+    if (!Number.isInteger(size) || size < 0) {
+	throw new Error ("Number of samples must be a non-negative integer.");
+    }
+    if (!this.draw) {
+        throw new Error ("Distribution must specify a draw function.");
+    }
+    var result = [];
+    while (size--) {
+        result.push(this.draw());
+    }
+    return result;
 };
 // Prototype for discrete distributions
 var _samplerPrototype = {
